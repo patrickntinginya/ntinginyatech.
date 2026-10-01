@@ -1,0 +1,95 @@
+import type { Metadata, Viewport } from "next";
+import { Bricolage_Grotesque, Source_Serif_4 } from "next/font/google";
+import type { ReactNode } from "react";
+import { siteConfig } from "@/config/site";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { HideOnAdmin } from "@/components/layout/HideOnAdmin";
+import "./globals.css";
+
+// Public pages refresh from the CMS at most every 5 minutes (admin pages are always dynamic).
+export const revalidate = 300;
+
+const display = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const body = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  keywords: [
+    "Ntinginya Tech",
+    "Tanzania technology company",
+    "software development Tanzania",
+    "agriculture technology",
+    "livestock technology",
+    "AgriTech innovation",
+    "business software",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#EAF0E9",
+  width: "device-width",
+  initialScale: 1,
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description: siteConfig.description,
+  slogan: siteConfig.tagline,
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <body>
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
+        <HideOnAdmin>
+          <Header />
+        </HideOnAdmin>
+        <main id="main">{children}</main>
+        <HideOnAdmin>
+          <Footer />
+        </HideOnAdmin>
+        <script
+          type="application/ld+json"
+          // JSON.stringify of static site config: safe to inline.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </body>
+    </html>
+  );
+}
