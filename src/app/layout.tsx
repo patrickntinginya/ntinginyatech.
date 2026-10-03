@@ -29,7 +29,9 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  <meta name="google-site-verification" content="R9m1_tw0NNwcL0X4jWw3dvWOtcuvkFqAGmlzpxqSuHI" />
+  verification: {
+  google: "R9m1_tw0NNwcL0X4jWw3dvWOtcuvkFqAGmlzpxqSuHI",
+},
   applicationName: siteConfig.name,
   keywords: [
     "Ntinginya Tech",
